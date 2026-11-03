@@ -13,18 +13,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Run Claude Code
         uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+
           prompt: |
             This is a cloud execution test.
 
             1. Confirm you can access this repository.
-            2. Create CLAUDE-CLOUD-TEST.md.
-            3. Write:
+            2. Create CLAUDE-CLOUD-TEST.md in the repository root.
+            3. Write the following content:
+
                Claude Code successfully ran inside GitHub Actions.
+
             4. Do not modify any other files.
+            5. Report what you created.
+
           claude_args: |
             --max-turns 5
             --allowedTools "Read,Write"
