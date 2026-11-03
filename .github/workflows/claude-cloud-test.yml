@@ -45,13 +45,16 @@ jobs:
           fi
 
       - name: Commit and push generated file
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
           git add CLAUDE-CLOUD-TEST.md
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else
             git commit -m "Add Claude cloud test file"
-            git push
+            git push origin HEAD:main
           fi
