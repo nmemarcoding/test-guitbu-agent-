@@ -20,19 +20,28 @@ jobs:
         uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-
+          show_full_output: true
           prompt: |
-            This is a cloud execution test.
+            Create a file named CLAUDE-CLOUD-TEST.md
+            in the repository root.
 
-            1. Confirm you can access this repository.
-            2. Create CLAUDE-CLOUD-TEST.md in the repository root.
-            3. Write the following content:
+            Write exactly:
+            Claude successfully created this file in GitHub Cloud.
 
-               Claude Code successfully ran inside GitHub Actions.
-
-            4. Do not modify any other files.
-            5. Report what you created.
-
+            Verify that the file exists after writing it.
+            Do not modify any other files.
           claude_args: |
             --max-turns 5
             --allowedTools "Read,Write"
+
+      - name: Check generated file
+        run: |
+          echo "Checking Claude output..."
+          ls -la
+          if [ -f CLAUDE-CLOUD-TEST.md ]; then
+            echo "SUCCESS: File exists."
+            cat CLAUDE-CLOUD-TEST.md
+          else
+            echo "ERROR: Claude did not create the file."
+            exit 1
+          fi
